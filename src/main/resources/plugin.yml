@@ -1,0 +1,12 @@
+name: NBEssentials
+version: 0.0.1
+description: A simple plugin that adds a lot of useful commands for players
+author: Maxime LUCAS
+main: me.maximelucas.nonbinaires.NBEssentials
+commands:
+   afk:
+      description: Set yourself AFK.
+      usage: Syntax error! Simply type /<command> to set yourself AFK
+   trash:
+      description: Open a trash to permanently delete item.
+      usage: Syntax error! Simply type /<command> to open the trash
