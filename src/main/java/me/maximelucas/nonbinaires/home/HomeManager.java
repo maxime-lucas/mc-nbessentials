@@ -1,5 +1,12 @@
 package me.maximelucas.nonbinaires.home;
 
-public class HomeManager implements IHomeManager {
+import me.maximelucas.nonbinaires.common.CommonManager;
+
+public class HomeManager extends CommonManager implements IHomeManager {
+
+	@Override
+	public void init() {
+
+	}
 
 }
