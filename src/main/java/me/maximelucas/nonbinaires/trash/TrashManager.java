@@ -14,9 +14,12 @@ public class TrashManager extends CommonManager implements ITrashManager {
 	public TrashManager(NBEssentials nbEssentials) {
 		super(nbEssentials);
 	}
+	
+	@Override
+	public void registerEvents() {}
 
 	@Override
-	public void init() {
+	public void registerCommands() {
 		registerCommand("trash", new TrashCommand(this));
 	}
 

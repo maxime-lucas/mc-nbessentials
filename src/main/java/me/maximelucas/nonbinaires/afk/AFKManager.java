@@ -19,9 +19,14 @@ public class AFKManager extends CommonManager implements IAFKManager {
 		super(nbEssentials);
 		this.afkPlayers = new ArrayList<String>();
 	}
-
-	public void init() {
+	
+	@Override
+	public void registerCommands() {
 		registerCommand("afk", new AFKCommand(this));
+	}
+
+	@Override
+	public void registerEvents() {
 		this.main.getServer().getPluginManager().registerEvents(new OnMoveExitAFK(this), main);
 	}
 
