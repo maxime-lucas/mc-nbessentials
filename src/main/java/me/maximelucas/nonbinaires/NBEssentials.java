@@ -10,6 +10,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
 import me.maximelucas.nonbinaires.afk.AFKManager;
+import me.maximelucas.nonbinaires.back.BackManager;
 import me.maximelucas.nonbinaires.common.ICommonManager;
 import me.maximelucas.nonbinaires.common.Properties;
 import me.maximelucas.nonbinaires.home.HomeManager;
@@ -42,6 +43,7 @@ public class NBEssentials extends JavaPlugin {
 		managers = new ArrayList<ICommonManager>();
 		managers.add(new AFKManager(this));
 		managers.add(new TrashManager(this));
+		managers.add(new BackManager(this));
 
 		Integer nbMaxHomes = getConfig().getInt(Properties.MAX_HOME);
 		try {
