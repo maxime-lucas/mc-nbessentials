@@ -1,26 +1,29 @@
 package me.maximelucas.nonbinaires;
 
-import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
 
 import me.maximelucas.nonbinaires.afk.AFKManager;
-import me.maximelucas.nonbinaires.afk.IAFKManager;
-import me.maximelucas.nonbinaires.persistence.entities.HomeEntity;
-import me.maximelucas.nonbinaires.trash.ITrashManager;
+import me.maximelucas.nonbinaires.common.ICommonManager;
+import me.maximelucas.nonbinaires.common.Properties;
+import me.maximelucas.nonbinaires.home.HomeManager;
 import me.maximelucas.nonbinaires.trash.TrashManager;
 
 public class NBEssentials extends JavaPlugin {
 
+	private String databaseUrl;
+	private ConnectionSource connectionSource;
+	private List<ICommonManager> managers;
+
 	@Override
 	public void onEnable() {
+
 		super.onEnable();
 		this.getLogger().info("NBEssentials is now loaded !");
 
@@ -28,70 +31,43 @@ public class NBEssentials extends JavaPlugin {
 		getConfig().options().copyDefaults();
 		saveDefaultConfig();
 
-		IAFKManager afkManager = new AFKManager(this);
-		ITrashManager trashManager = new TrashManager(this);
+		// Database configuration
+		this.databaseUrl = getConfig().getString(Properties.DATABASE_URL);
+		if (this.databaseUrl == null || this.databaseUrl.isEmpty()) {
+			this.getLogger().severe("Missing property '" + Properties.DATABASE_URL + "' in the configuration file");
+			throw new IllegalArgumentException();
+		}
 
-		afkManager.init();
-		trashManager.init();
+		// Manager creation and initialization
+		managers = new ArrayList<ICommonManager>();
+		managers.add(new AFKManager(this));
+		managers.add(new TrashManager(this));
 
-		testDb();
+		Integer nbMaxHomes = getConfig().getInt(Properties.MAX_HOME);
+		try {
+			managers.add(new HomeManager(this, nbMaxHomes));
+		} catch (Exception e) {
+			getLogger().severe("An error occured on Home feature initialization");
+			e.printStackTrace();
+		}
+
+		for (ICommonManager manager : managers) {
+			manager.registerCommands();
+			manager.registerEvents();
+		}
+
 	}
 
-	public void testDb() {
-		ConnectionSource connectionSource = null;
-		try {
-			connectionSource = new JdbcConnectionSource("jdbc:sqlite:nbessentials.db");
-		} catch (SQLException e) {
-			this.getLogger().severe("SQL Exception when creating JdbcConnectionSource");
-			e.printStackTrace();
-		}
+	public ConnectionSource getDB() {
 
-		Dao<HomeEntity, String> homeDao = null;
-		try {
-			homeDao = DaoManager.createDao(connectionSource, HomeEntity.class);
-		} catch (SQLException e) {
-			this.getLogger().severe("SQL Exception when creating Home DAO");
-			e.printStackTrace();
+		if (this.connectionSource == null) {
+			try {
+				connectionSource = new JdbcConnectionSource(this.databaseUrl);
+			} catch (SQLException e) {
+				getLogger().severe("[SQLException] " + e.getMessage());
+				return null;
+			}
 		}
-
-		try {
-			TableUtils.createTableIfNotExists(connectionSource, HomeEntity.class);
-		} catch (SQLException e) {
-			this.getLogger().severe("SQL Exception when creating Home table");
-			e.printStackTrace();
-		}
-
-		// create an instance of Home
-		HomeEntity home = new HomeEntity();
-		home.setName("My Home");
-		home.setPlayer("Player");
-		home.setPosX(10.0);
-		home.setPosY(11.0);
-		home.setPosZ(12.0);
-
-		try {
-			homeDao.create(home);
-		} catch (SQLException e) {
-			this.getLogger().severe("SQL Exception when persisting home object");
-			e.printStackTrace();
-		}
-
-		HomeEntity homeInDb = null;
-		try {
-			homeInDb = homeDao.queryForSameId(home);
-		} catch (SQLException e) {
-			this.getLogger().severe("SQL Exception when querying home");
-			e.printStackTrace();
-		}
-		System.out.println("Home: " + homeInDb.getPlayer());
-
-		// close the connection source
-		try {
-			connectionSource.close();
-		} catch (IOException e) {
-			this.getLogger().severe("SQL Exception when closing connection source");
-			e.printStackTrace();
-		}
+		return connectionSource;
 	}
-
 }

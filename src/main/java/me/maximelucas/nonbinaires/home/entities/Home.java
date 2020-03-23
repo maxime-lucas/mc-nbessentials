@@ -1,4 +1,4 @@
-package me.maximelucas.nonbinaires.persistence.entities;
+package me.maximelucas.nonbinaires.home.entities;
 
 import java.util.UUID;
 
@@ -6,7 +6,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "homes")
-public class HomeEntity {
+public class Home {
 	@DatabaseField(generatedId = true)
 	private UUID id;
 

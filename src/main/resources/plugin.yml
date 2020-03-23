@@ -5,8 +5,21 @@ author: Maxime LUCAS
 main: me.maximelucas.nonbinaires.NBEssentials
 commands:
    afk:
-      description: Set yourself AFK.
+      description: Set yourself AFK
       usage: Syntax error! Simply type /<command> to set yourself AFK
    trash:
-      description: Open a trash to permanently delete item.
+      description: Open a trash to permanently delete item
       usage: Syntax error! Simply type /<command> to open the trash
+   home:
+      description: Define, remove and teleport to your home
+      usage: |
+         /<command> list - Get the list of your homes
+         /<command> <name> - Teleport to a home
+         /<command> set <name> - Create a home at your location
+         /<command> remove <name> - Delete a home
+   sethome:
+      description: Create a home at your location
+      usage: /<command> <name>
+   delhome:
+      description: Delete a home
+      usage: /<command> <name>

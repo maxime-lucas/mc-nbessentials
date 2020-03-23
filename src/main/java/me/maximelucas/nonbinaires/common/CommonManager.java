@@ -11,7 +11,8 @@ public abstract class CommonManager {
 
 	}
 
-	public abstract void init();
+	public abstract void registerCommands();
+	public abstract void registerEvents();
 
 	public CommonManager(NBEssentials nbEssentials) {
 		this.main = nbEssentials;
