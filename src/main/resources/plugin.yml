@@ -7,6 +7,9 @@ commands:
    afk:
       description: Set yourself AFK
       usage: Syntax error! Simply type /<command> to set yourself AFK
+   back:
+      description: Teleport yourself to your previous location
+      usage: Syntax error! Simply type /<command>
    trash:
       description: Open a trash to permanently delete item
       usage: Syntax error! Simply type /<command> to open the trash
