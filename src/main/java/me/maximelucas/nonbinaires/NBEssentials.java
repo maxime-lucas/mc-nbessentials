@@ -15,6 +15,7 @@ import me.maximelucas.nonbinaires.common.ICommonManager;
 import me.maximelucas.nonbinaires.common.Properties;
 import me.maximelucas.nonbinaires.home.HomeManager;
 import me.maximelucas.nonbinaires.trash.TrashManager;
+import me.maximelucas.nonbinaires.vanish.VanishManager;
 
 public class NBEssentials extends JavaPlugin {
 
@@ -44,6 +45,7 @@ public class NBEssentials extends JavaPlugin {
 		managers.add(new AFKManager(this));
 		managers.add(new TrashManager(this));
 		managers.add(new BackManager(this));
+		managers.add(new VanishManager(this));
 
 		Integer nbMaxHomes = getConfig().getInt(Properties.MAX_HOME);
 		try {
