@@ -26,3 +26,8 @@ commands:
    delhome:
       description: Delete a home
       usage: /<command> <name>
+   vanish:
+      description: Set yourself invisible to others
+      usage: Syntax error! Simply type /<command> to disappear
+      permission: vanish.self
+      permission-message: You don't have permission to use this command.
